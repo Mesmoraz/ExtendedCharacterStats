@@ -159,8 +159,12 @@ end
 function _SpellHit:GetSpellHitFromRunes()
     local mod = 0
     local runeSpellIds = {
-        [226413] = 6,  -- Rune of Arcane Specialization, +6% hit chance
-        -- Add more runes here with their respective hit chance bonuses
+        [226413] = 6,  -- Rune of Arcane Specialization: +6% hit chance with Arcane spells
+        [226414] = 6,  -- Rune of Fire Specialization: +6% hit chance with Fire spells
+        [226415] = 6,  -- Rune of Frost Specialization: +6% hit chance with Frost spells
+        [226416] = 6,  -- Rune of Nature Specialization: +6% hit chance with Nature spells
+        [226417] = 6,  -- Rune of Shadow Specialization: +6% hit chance with Shadow spells
+        [226418] = 6,  -- Rune of Holy Specialization: +6% hit chance with Holy spells
     }
 
     for i = 1, 40 do
