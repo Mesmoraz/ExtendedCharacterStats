@@ -99,10 +99,17 @@ end
 
 ---@return number
 function _SpellHit:GetSpellHitBonus()
+    local mod = 0
     if CR_HIT_SPELL then
-        return GetCombatRatingBonus(CR_HIT_SPELL) + _SpellHit:GetSpellHitFromBuffs()
+        mod = GetCombatRatingBonus(CR_HIT_SPELL)
+    else
+        mod = GetSpellHitModifier()
     end
-    return GetSpellHitModifier()
+
+    mod = mod + _SpellHit:GetSpellHitFromBuffs()
+    mod = mod + _SpellHit:GetSpellHitFromRunes()  -- Add rune hit bonus
+
+    return mod
 end
 
 function _SpellHit:GetSpellHitFromBuffs()
@@ -146,4 +153,27 @@ end
 ---@return number
 function Data:SpellHitRating()
     return GetCombatRating(CR_HIT_SPELL)
+end
+
+---@return number
+function _SpellHit:GetSpellHitFromRunes()
+    local mod = 0
+    local runeSpellIds = {
+        [226413] = 6,  -- Rune of Arcane Specialization, +6% hit chance
+        -- Add more runes here with their respective hit chance bonuses
+    }
+
+    for i = 1, 40 do
+        local _, _, _, _, _, _, _, _, _, spellId, _ = UnitAura("player", i, "HELPFUL")
+        if spellId == nil then
+            break
+        end
+
+        if runeSpellIds[spellId] then
+            mod = runeSpellIds[spellId]
+            break  -- Stop checking after the first valid rune to avoid stacking
+        end
+    end
+
+    return mod
 end
